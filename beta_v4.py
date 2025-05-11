@@ -16,7 +16,7 @@ import ctypes
 with open("firebase_connector.json") as f:
     config = json.load(f)
 
-cred = credentials.Certificate(firebase_credentials)
+cred = credentials.Certificate(config)
 firebase_admin.initialize_app(cred)
 
 # App Name Mapping
