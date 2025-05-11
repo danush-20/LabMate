@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Selection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='labnames.css') }}">
+    <link type="image/png" sizes="16x16" rel="icon" href="{{url_for('static', filename='icon.png')}}">
+
+</head>
+
+<body>
+<form action="{{ url_for('logout') }}" method="POST" class="logout-form">
+    <button type="submit" class="logout-btn">Logout</button>
+</form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3 class="animate-charcter"> LabMate</h3><br><br><br><br>
+        </div>
+    </div>
+</div>
+        <h2>Select a Lab</h2>
+        <ul>
+            {% for lab, lab_data in combine_data.items() %}
+            <li class="button-35">
+                <form action="{{url_for('toggle_lab', lab=lab)}}" method="POST">
+                    <input type="hidden" name="lab" value="{{ lab }}">
+                    <span><a href="{{url_for('lab_details',lab_name=lab)}}">{{ lab }}</span></a>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="status" onchange="this.form.submit()" {% if lab_data['status'] == 'active'%}checked{% endif %} />
+                        <span class="slider"></span>
+                    </label>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</body>
+
+</html>
+
+

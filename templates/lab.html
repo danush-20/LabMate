@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" http-equiv="refresh" content="5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lab_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='lab.css') }}">
+    <link type="image/png" sizes="16x16" rel="icon" href="{{url_for('static', filename='icon.png')}}">
+
+</head>
+
+<body>
+    <header>
+<div class="header-container">
+    <h2>{{ lab_name }}</h2>
+</div><br>
+</header>
+    {% set icon_map = {
+    "Google Chrome": "chrome.png",
+    "uTorrent": "utorrent.png",
+    "Microsoft Edge":"microsoftedge.png",
+    "VS Code":"vscode.png",
+    "File Explorer":"fileexplorer.png",
+    "Microsoft Word":"word.png",
+    "Notepad":"notepad.png",
+    "VLC Media Player":"vlc.png",
+    "Discord":"discord.png",          
+    "Mozilla Firefox":"firefox.png",
+    "uTorrent":"utorrent.png",
+    "qBittorrent":"qbittorrent.png",
+    "PyCharm":"pycharm.png",
+    "Desktop":"desktop.png",
+    "Steam":"stream.png",
+    "Microsoft Excel":"excel.png",
+    "Microsoft PowerPoint":"powerpoint.png"
+
+    } %}
+
+<div class="button-container">
+    <div class="lab-names-button">
+        <a href="{{ url_for('labnames') }}" class="btn">Go to Lab Names</a>
+    </div>
+
+    <div class="sleepbutton">
+        <form action="{{ url_for('sleep_all', lab_name=lab_name) }}" method="POST">
+            <button type="submit" class="sleepbutton {% if sleep_status == 'Slept' %}slept{% endif %}">
+                {{ sleep_status }}
+            </button>
+        </form>
+    </div>
+</div>
+    <div class="grid-container">
+        {% for system, details in systems.items() %}
+        {% set last_active = details.get("last_active", "0") | int %}
+        {% set is_offline = (current_time - last_active) > 300 %}
+        {% set active_window = details.get("active window", "Unknown") %}
+        {% set icon_file = icon_map.get(active_window, 'unknown.png') %}
+
+        <div class="grid-item {% if is_offline %} offline {% endif %}">
+            <img class="icon" src="{{ url_for('static', filename=icon_file) }}" ><br>
+            {{ system }}<br>
+            <div class="tooltip">
+                {{ details.get("internet app", "No Data") }}<br>
+                {{ details.get("internet speed", "No Data") }} <br>
+                {% if icon_file == 'unknown.png' %}
+                {{ active_window }}<br>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>
